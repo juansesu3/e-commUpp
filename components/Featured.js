@@ -11,7 +11,7 @@ const Bg = styled.div`
 const Title = styled.h1`
   margin: 0;
   font-weight: normal;
-  font-size: 4rem;
+  font-size: 3rem;
 `;
 
 const Desc = styled.p`
@@ -21,7 +21,7 @@ const Desc = styled.p`
 
 const ColumnsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1.1fr 0.9fr;
   gap: 40px;
   img {
     max-width: 100%;
@@ -39,18 +39,16 @@ const ButtonWrapper = styled.div`
   margin-top:25px
 `;
 
-const Featured = () => {
+const Featured = ({product}) => {
   return (
     <Bg>
       <Center>
         <ColumnsWrapper>
           <Column>
             <div>
-              <Title>Pro anywhere</Title>
+              <Title>{product.title}</Title>
               <Desc>
-                Lorem Ipsum es simplemente el texto de relleno de las imprentas
-                y archivos de texto. Lorem Ipsum ha sido el texto de relleno
-                estándar de las industrias desde el año 1500, cuando un impresor
+                {product.description}
               </Desc>
 
               <ButtonWrapper>
