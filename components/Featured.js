@@ -38,10 +38,10 @@ const Column = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 10px;
-  margin-top:25px
+  margin-top: 25px;
 `;
 
-const Featured = ({product}) => {
+const Featured = ({ product }) => {
   return (
     <Bg>
       <Center>
@@ -49,17 +49,19 @@ const Featured = ({product}) => {
           <Column>
             <div>
               <Title>{product.title}</Title>
-              <Desc>
-                {product.description}
-              </Desc>
+              <Desc>{product.description}</Desc>
 
               <ButtonWrapper>
-                <ButtonLink href={'/product/'+product._id} outline={1} white={1} >
+                <ButtonLink
+                  href={"/product/" + product._id}
+                  outline={1}
+                  white={1}
+                >
                   Read more
                 </ButtonLink>
-                <Button primary={1} >
-                  <CartIcon/>Add to cart
-                  
+                <Button white={1}>
+                  <CartIcon />
+                  Add to cart
                 </Button>
               </ButtonWrapper>
             </div>
