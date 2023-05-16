@@ -1,6 +1,6 @@
 import { css, styled } from "styled-components";
 
-const StyleButton = styled.button`
+export const ButtonStyle = css`
   border: 0;
   padding: 5px 15px;
   border-radius: 5px;
@@ -26,14 +26,14 @@ const StyleButton = styled.button`
       color: #fff;
       border: 1px solid #fff;
     `}
-  ${(props) =>
+${(props) =>
     props.primary &&
     css`
       background-color: #5542f6;
       border: 1px solid #5542f6;
       color: #fff;
     `}
-  ${(props) =>
+${(props) =>
     props.size === "l" &&
     css`
       font-size: 1.2rem;
@@ -42,6 +42,10 @@ const StyleButton = styled.button`
         height: 20px;
       }
     `}
+`;
+
+const StyleButton = styled.button`
+  ${ButtonStyle}
 `;
 
 const Button = ({ children, ...rest }) => {
