@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
+import Table from "@/components/Table";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
@@ -19,13 +20,36 @@ const Box = styled.div`
   padding: 30px;
 `;
 
+const ProductInfoCell = styled.td`
+padding: 10px 0;
+
+`;
+
+const ProductImageBox = styled.div`
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    border-radius: 10px;
+    border :1px solid rgba(0,0,0,.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+
+`;
+
+
+
 const CartPage = () => {
   const { cartProducts } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   useEffect(() => {
     if (cartProducts.length > 0) {
-      axios.post("/api/cart", { ids: cartProducts })
-      .then((response) => {
+      axios.post("/api/cart", { ids: cartProducts }).then((response) => {
         setProducts(response.data);
       });
     }
@@ -37,14 +61,36 @@ const CartPage = () => {
       <Center>
         <ColumnsWrapper>
           <Box>
+            <h2>Cart</h2>
             {!cartProducts?.length && <div>You cart is empty</div>}
             {products?.length > 0 && (
-              <>
-                <h2>Cart</h2>
-                {products.map((product) => (
-                  <div key={product._id} >{product.title}</div>
-                ))}
-              </>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product._id}>
+                      <ProductInfoCell>
+                        <ProductImageBox><img
+                          src={product.images[0]}
+                          alt="product-in-cart-images"
+                        /></ProductImageBox>
+                        
+                        {product.title}
+                      </ProductInfoCell>
+                      <td>
+                        {cartProducts.filter((id) => id === product._id).length}
+                      </td>
+                      <td>price</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             )}
           </Box>
           {!!cartProducts?.length && (
