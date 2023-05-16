@@ -21,31 +21,30 @@ const Box = styled.div`
 `;
 
 const ProductInfoCell = styled.td`
-padding: 10px 0;
-
+  padding: 10px 0;
 `;
 
 const ProductImageBox = styled.div`
-    width: 100px;
-    height: 100px;
-    padding: 10px;
-    border-radius: 10px;
-    border :1px solid rgba(0,0,0,.1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
+  width: 100px;
+  height: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
     max-width: 80px;
     max-height: 80px;
   }
-
-
 `;
 
-
+const QuantityLabel = styled.span`
+  padding: 0 3px;
+`;
 
 const CartPage = () => {
-  const { cartProducts } = useContext(CartContext);
+  const { cartProducts, addProduct, removeProduct } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -54,6 +53,21 @@ const CartPage = () => {
       });
     }
   }, [cartProducts]);
+
+  const moreOfThisProduct = (id) => {
+    addProduct(id);
+  };
+
+  const lessOfThisProduct = (id) => {
+    removeProduct(id);
+  };
+
+  let total = 0;
+
+  for (const productId of cartProducts) {
+    const price = products.find((p) => p._id === productId)?.price || 0;
+    total += price;
+  }
 
   return (
     <>
@@ -76,19 +90,41 @@ const CartPage = () => {
                   {products.map((product) => (
                     <tr key={product._id}>
                       <ProductInfoCell>
-                        <ProductImageBox><img
-                          src={product.images[0]}
-                          alt="product-in-cart-images"
-                        /></ProductImageBox>
-                        
+                        <ProductImageBox>
+                          <img
+                            src={product.images[0]}
+                            alt="product-in-cart-images"
+                          />
+                        </ProductImageBox>
+
                         {product.title}
                       </ProductInfoCell>
                       <td>
-                        {cartProducts.filter((id) => id === product._id).length}
+                        <Button onClick={() => lessOfThisProduct(product._id)}>
+                          -
+                        </Button>
+                        <QuantityLabel>
+                          {
+                            cartProducts.filter((id) => id === product._id)
+                              .length
+                          }
+                        </QuantityLabel>
+                        <Button onClick={() => moreOfThisProduct(product._id)}>
+                          +
+                        </Button>
                       </td>
-                      <td>price</td>
+                      <td>
+                        $
+                        {cartProducts.filter((id) => id === product._id)
+                          .length * product.price}
+                      </td>
                     </tr>
                   ))}
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>${total}</td>
+                  </tr>
                 </tbody>
               </Table>
             )}
