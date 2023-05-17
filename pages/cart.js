@@ -192,6 +192,11 @@ const CartPage = () => {
                   name="country"
                   onChange={(ev) => setCountry(ev.target.value)}
                 />
+                <input
+                  type="hidden"
+                  name="products"
+                  value={cartProducts.join(",")}
+                />
                 <Button black={1} block={1} type="submit">
                   Continue to payment
                 </Button>
