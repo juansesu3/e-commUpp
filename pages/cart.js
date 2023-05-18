@@ -79,7 +79,7 @@ const CartPage = () => {
       }
     }
 
-  }, []);
+  }, [clearCart]);
 
   const moreOfThisProduct = (id) => {
     addProduct(id);
