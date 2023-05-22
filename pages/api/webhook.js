@@ -1,4 +1,5 @@
 import { mongooseConnect } from "@/lib/mongoose";
+import { Order } from "@/models/Order";
 const stripe = require("stripe")(process.env.STRIPE_SK);
 import {buffer} from 'micro';
 
@@ -19,19 +20,31 @@ const handler = async (req, res) => {
 
   // Handle the event
   switch (event.type) {
-    case "payment_intent.succeeded":
-      const paymentIntentSucceeded = event.data.object;
+    case "checkout.session.completed":
+      const data = event.data.object;
       // Then define and call a function to handle the event payment_intent.succeeded
-      console.log(paymentIntentSucceeded);
+      const orderId = data.metadata.orderId;
+      const paid = data.payment_status === 'paid';
+      if(orderId && paid){
+        await Order.findByIdAndUpdate(orderId,{
+          paid:true,
+        })
+      }
+
+      console.log(data);
       break;
     // ... handle other event types
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
+  res.status(200).send('ok');
 };
-
+ 
 export const config ={
     api: {bodyParser:false,}
 }
 
 export default handler;
+
+//led-vouch-eased-great
+//acct_1N8idHH8L3YnWDuP
