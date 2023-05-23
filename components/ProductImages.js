@@ -18,7 +18,7 @@ const ImageButtons = styled.div`
 `;
 
 const ImageButton = styled.div`
-border: 2px solid #ccc;
+  border: 2px solid #ccc;
   ${(props) =>
     props.active
       ? `
@@ -28,7 +28,7 @@ border: 2px solid #ccc;
   border-color: transparent;
   opacity:.7;
   `}
-  
+
   height: 30px;
   padding: 0px;
   cursor: pointer;
