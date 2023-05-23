@@ -15,7 +15,7 @@ const CategoriesPage = ({ mainCategories, categoriesProducts }) => {
               <h2>{cat.name}</h2>
               <div>
                 {categoriesProducts[cat._id].map((p) => (
-                  <div key={p}>{p.title}</div>
+                  <div key={p._id}>{p.title}</div>
                 ))}
               </div>
             </div>
@@ -32,9 +32,15 @@ export const getServerSideProps = async () => {
   const categoriesProducts = {}; //catId => [products]
 
   for (const mainCat of mainCategories) {
-    const products = await Product.find({ category: mainCat._id }, null, {
+    const mainCatId = mainCat._id.toString();
+    const childCatIds = categories
+      .filter((c) => c?.parent?.toString() === mainCatId)
+      .map((c) => c._id.toString());
+    const categoriesIds = [mainCatId, ...childCatIds];
+
+    const products = await Product.find({ category: categoriesIds }, null, {
       limit: 3,
-      sort: { '_id': -1 },
+      sort: { _id: -1 },
     });
     categoriesProducts[mainCat._id] = products;
   }
