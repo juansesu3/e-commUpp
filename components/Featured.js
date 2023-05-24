@@ -1,11 +1,11 @@
 import { styled } from "styled-components";
 import Center from "./Center";
-import Button from "./Button";
 import ButtonLink from "./ButtonLink";
 import CartIcon from "./icons/CartIcon";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
 import FlyingButton from "./FlyingButton";
+import {RevealWrapper} from "next-reveal";
 
 const Bg = styled.div`
   background-color: #222;
@@ -15,7 +15,7 @@ const Bg = styled.div`
 
 const Title = styled.h1`
   margin: 0;
-  font-weight: normal;
+  font-weight: normal; 
   font-size: 1.5rem;
   @media screen and (min-width: 768px) {
     font-size: 3rem;
@@ -72,9 +72,11 @@ const Featured = ({ product }) => {
         <ColumnsWrapper>
           <Column>
             <div>
+            
+
+              <RevealWrapper origin={'left'} delay={0}>
               <Title>{product.title}</Title>
               <Desc>{product.description}</Desc>
-
               <ButtonWrapper>
                 <ButtonLink
                   href={"/product/" + product._id}
@@ -83,18 +85,25 @@ const Featured = ({ product }) => {
                 >
                   Read more
                 </ButtonLink>
-                <FlyingButton white={1} _id={product._id} src={product.images?.[0]}>
-                  <CartIcon /> 
+                <FlyingButton
+                  white={1}
+                  _id={product._id}
+                  src={product.images?.[0]}
+                >
+                  <CartIcon />
                   Add to cart
                 </FlyingButton>
               </ButtonWrapper>
+              </RevealWrapper>
             </div>
           </Column>
           <Column>
-            <img
-              src="https://juan-sesu-ecommerce.s3.amazonaws.com/1684156350232.png"
-              alt="product-image"
-            />
+            <RevealWrapper delay={0}>
+              <img
+                src="https://juan-sesu-ecommerce.s3.amazonaws.com/1684156350232.png"
+                alt="product-image"
+              />
+            </RevealWrapper>
           </Column>
         </ColumnsWrapper>
       </Center>
