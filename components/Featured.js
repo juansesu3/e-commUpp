@@ -5,6 +5,7 @@ import ButtonLink from "./ButtonLink";
 import CartIcon from "./icons/CartIcon";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
+import FlyingButton from "./FlyingButton";
 
 const Bg = styled.div`
   background-color: #222;
@@ -36,18 +37,18 @@ const ColumnsWrapper = styled.div`
     display: block;
     margin: 0 auto;
   }
-  div:nth-child(1){
+  div:nth-child(1) {
     order: 2;
   }
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 1.1fr 0.9fr;
-    div:nth-child(1){
-    order: 0;
-  }
-  img {
-    max-width: 100%;
-  }
+    div:nth-child(1) {
+      order: 0;
+    }
+    img {
+      max-width: 100%;
+    }
   }
 `;
 
@@ -64,9 +65,6 @@ const ButtonWrapper = styled.div`
 
 const Featured = ({ product }) => {
   const { addProduct } = useContext(CartContext);
-  const addFeatureToCart = () => {
-    addProduct(product._id);
-  };
 
   return (
     <Bg>
@@ -85,10 +83,10 @@ const Featured = ({ product }) => {
                 >
                   Read more
                 </ButtonLink>
-                <Button white={1} onClick={addFeatureToCart}>
-                  <CartIcon />
+                <FlyingButton white={1} _id={product._id} src={product.images?.[0]}>
+                  <CartIcon /> 
                   Add to cart
-                </Button>
+                </FlyingButton>
               </ButtonWrapper>
             </div>
           </Column>
