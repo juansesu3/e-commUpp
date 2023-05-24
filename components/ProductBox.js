@@ -4,7 +4,9 @@ import CartIcon from "./icons/CartIcon";
 import Link from "next/link";
 import { Children, useContext } from "react";
 import { CartContext } from "./CartContext";
-import FlyingButton from "react-flying-item";
+
+import { primary } from "@/lib/colors";
+import FlyingButton from "./FlyingButton";
 
 const ProductWrapper = styled.div``;
 
@@ -57,42 +59,22 @@ const Price = styled.div`
   }
 `;
 
-const ButtonWrapper = styled.div`
-  button {
-    ${ButtonStyle}
-  }
-`;
 
 const ProductBox = ({ _id, title, description, price, images }) => {
-  const { addProduct } = useContext(CartContext);
+  
   const url = "/product/" + _id;
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
         <div>
-          <img src={images[0]} alt="products-images" />
+          <img src={images?.[0]} alt="products-images" />
         </div>
       </WhiteBox>
       <ProductInfoBox>
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <ButtonWrapper onClick={() => addProduct(_id)}>
-            <FlyingButton
-              src={images[0]}
-              targetTop={"5%"}
-              targetLeft={"95%"}
-              flyingItemStyling={{
-                width: "auto",
-                heigth: "auto",
-                maxWidth: "60px",
-                maxHeigth: "60px",
-                borderRadius: 0,
-              }}
-            >
-              Add to cart
-            </FlyingButton>
-          </ButtonWrapper>
+        <FlyingButton _id={_id} src={images?.[0]}>Add to cart</FlyingButton>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>
