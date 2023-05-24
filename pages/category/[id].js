@@ -48,6 +48,8 @@ const CategoryPage = ({
     category.properties.map((p) => ({ name: p.name, value: "all" }))
   );
 
+  const [sort, setSort] = useState("price_desc");
+
   const handlerFilterChange = (filterName, filterValue) => {
     setFiltersValues((prev) => {
       return prev.map((p) => ({
@@ -62,6 +64,7 @@ const CategoryPage = ({
 
     const params = new URLSearchParams();
     params.set("categories", catIds.join(","));
+    params.set("sort", sort);
     filtersValues.forEach((f) => {
       if (f.value !== "all") {
         params.set(f.name, f.value);
@@ -71,7 +74,7 @@ const CategoryPage = ({
     axios.get(url).then((res) => {
       setProducts(res.data);
     });
-  }, [filtersValues]);
+  }, [filtersValues, sort]);
 
   return (
     <>
@@ -98,6 +101,13 @@ const CategoryPage = ({
                 </select>
               </Filter>
             ))}
+            <Filter>
+              <span>Sorting:</span>
+              <select value={sort} onChange={(ev) => setSort(ev.target.value)}>
+                <option value="price_asc">price, lowest first</option>
+                <option value="price_desc">price, highest first</option>
+              </select>
+            </Filter>
           </FiltersWrapper>
         </CategoryHeader>
 

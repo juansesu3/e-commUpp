@@ -1,10 +1,11 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
+import { useState } from "react";
 
 const handle = async (req, res) => {
   await mongooseConnect();
-  const { categories, ...filters } = req.query;
-  console.log({ filters });
+  const { categories, sort, ...filters } = req.query;
+  const [sortField, sortOrder] = sort.split("_");
   const productsQuery = {
     category: categories.split(","),
   };
@@ -13,7 +14,11 @@ const handle = async (req, res) => {
       productsQuery["properties." + filterName] = filters[filterName];
     });
   }
-  res.json(await Product.find(productsQuery));
+  res.json(
+    await Product.find(productsQuery, null, {
+      sort: { [sortField]: sortOrder === "asc" ? 1 : -1 },
+    })
+  );
 };
 
 export default handle;
