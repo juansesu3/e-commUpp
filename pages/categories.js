@@ -18,7 +18,7 @@ const CategoryGrid = styled.div`
 
 const CategoryTitle = styled.div`
   display: flex;
-  margin-top: 40px;
+  margin-top: 10px;
   margin-bottom: 0;
   align-items: center;
   gap: 20px;
@@ -66,7 +66,7 @@ const CategoriesPage = ({ mainCategories, categoriesProducts }) => {
                 {categoriesProducts[cat._id].map((p) => (
                   <ProductBox key={p._id} {...p} />
                 ))}
-                <ShowAllSquare href={"category" + cat._id}>
+                <ShowAllSquare href={"/category/" + cat._id}>
                   Show all &rarr;
                 </ShowAllSquare>
               </CategoryGrid>
