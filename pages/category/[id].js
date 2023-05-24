@@ -69,7 +69,7 @@ const CategoryPage = ({
     });
     const url = `/api/products?${params.toString()}`;
     axios.get(url).then((res) => {
-      console.log(res.data);
+      setProducts(res.data);
     });
   }, [filtersValues]);
 

@@ -5,10 +5,15 @@ const handle = async (req, res) => {
   await mongooseConnect();
   const { categories, ...filters } = req.query;
   console.log({ filters });
-  res.json(await Product.find({ 
+  const productsQuery = {
     category: categories.split(","),
-    properties: filters
-   }));
+  };
+  if (Object.keys(filters).length > 0) {
+    Object.keys(filters).forEach((filterName) => {
+      productsQuery["properties." + filterName] = filters[filterName];
+    });
+  }
+  res.json(await Product.find(productsQuery));
 };
 
 export default handle;
