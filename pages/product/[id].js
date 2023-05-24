@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
+import FlyingButton from "@/components/FlyingButton";
 import Header from "@/components/Header";
 import ProductImages from "@/components/ProductImages";
 import Title from "@/components/Title";
@@ -16,10 +17,9 @@ const ColWrapper = styled.div`
   grid-template-columns: 1fr;
   @media screen and (min-width: 768px) {
     grid-template-columns: 0.8fr 1.2fr;
-    
   }
   gap: 40px;
-  margin: 40px 0 ;
+  margin: 40px 0;
 `;
 
 const PriceRow = styled.div`
@@ -32,7 +32,7 @@ const Price = styled.span`
 `;
 
 const ProductPage = ({ product }) => {
-    const {addProduct} = useContext(CartContext);
+  const { addProduct } = useContext(CartContext);
   return (
     <>
       <Header />
@@ -50,12 +50,9 @@ const ProductPage = ({ product }) => {
               </div>
 
               <div>
-                <Button 
-                primary={1}
-                onClick={()=>addProduct(product._id)}
-                >
+                <FlyingButton main={1} _id={product._id} src={product.images?.[0]}>
                   <CartIcon /> Add to cart
-                </Button>
+                </FlyingButton>
               </div>
             </PriceRow>
           </div>

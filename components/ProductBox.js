@@ -1,11 +1,5 @@
 import { styled } from "styled-components";
-import Button, { ButtonStyle } from "./Button";
-import CartIcon from "./icons/CartIcon";
 import Link from "next/link";
-import { Children, useContext } from "react";
-import { CartContext } from "./CartContext";
-
-import { primary } from "@/lib/colors";
 import FlyingButton from "./FlyingButton";
 
 const ProductWrapper = styled.div``;
@@ -59,9 +53,7 @@ const Price = styled.div`
   }
 `;
 
-
 const ProductBox = ({ _id, title, description, price, images }) => {
-  
   const url = "/product/" + _id;
   return (
     <ProductWrapper>
@@ -74,7 +66,9 @@ const ProductBox = ({ _id, title, description, price, images }) => {
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-        <FlyingButton _id={_id} src={images?.[0]}>Add to cart</FlyingButton>
+          <FlyingButton _id={_id} src={images?.[0]}>
+            Add to cart
+          </FlyingButton>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>
