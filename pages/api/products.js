@@ -5,7 +5,7 @@ import { useState } from "react";
 const handle = async (req, res) => {
   await mongooseConnect();
   const { categories, sort, ...filters } = req.query;
-  const [sortField, sortOrder] = sort.split("_");
+  const [sortField, sortOrder] = sort.split("-");
   const productsQuery = {
     category: categories.split(","),
   };

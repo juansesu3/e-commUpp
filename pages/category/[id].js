@@ -1,6 +1,7 @@
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import ProductsGrid from "@/components/ProductsGrid";
+import Spinner from "@/components/Spinner";
 import Title from "@/components/Title";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
@@ -43,12 +44,16 @@ const CategoryPage = ({
   subCategories,
   products: originalProducts,
 }) => {
+  const defaultSorting = "_id-desc";
+  const defaultFiltersValues = category.properties.map((p) => ({
+    name: p.name,
+    value: "all",
+  }));
   const [products, setProducts] = useState(originalProducts);
-  const [filtersValues, setFiltersValues] = useState(
-    category.properties.map((p) => ({ name: p.name, value: "all" }))
-  );
-
-  const [sort, setSort] = useState("price_desc");
+  const [filtersValues, setFiltersValues] = useState(defaultFiltersValues);
+  const [sort, setSort] = useState(defaultSorting);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [filtersChanged, setFilterChanged] = useState(filtersValues);
 
   const handlerFilterChange = (filterName, filterValue) => {
     setFiltersValues((prev) => {
@@ -57,11 +62,15 @@ const CategoryPage = ({
         value: p.name === filterName ? filterValue : p.value,
       }));
     });
+    setFilterChanged(true);
   };
 
   useEffect(() => {
+    if (!filtersChanged) {
+      return;
+    }
+    setLoadingProducts(true);
     const catIds = [category._id, ...(subCategories?.map((c) => c._id) || [])];
-
     const params = new URLSearchParams();
     params.set("categories", catIds.join(","));
     params.set("sort", sort);
@@ -73,8 +82,10 @@ const CategoryPage = ({
     const url = `/api/products?${params.toString()}`;
     axios.get(url).then((res) => {
       setProducts(res.data);
+
+      setLoadingProducts(false);
     });
-  }, [filtersValues, sort]);
+  }, [filtersValues, sort, filtersChanged]);
 
   return (
     <>
@@ -103,15 +114,32 @@ const CategoryPage = ({
             ))}
             <Filter>
               <span>Sorting:</span>
-              <select value={sort} onChange={(ev) => setSort(ev.target.value)}>
-                <option value="price_asc">price, lowest first</option>
-                <option value="price_desc">price, highest first</option>
+              <select
+                value={sort}
+                onChange={(ev) => {
+                  setSort(ev.target.value);
+                  setFilterChanged(true);
+                }}
+              >
+                <option value="price-asc">price, lowest first</option>
+                <option value="price-desc">price, highest first</option>
+                <option value="_id-desc">newest first</option>
+                <option value="_id-asc">oldest first</option>
               </select>
             </Filter>
           </FiltersWrapper>
         </CategoryHeader>
+        {loadingProducts && <Spinner fullWidth />}
+        {!loadingProducts && (
+          <div>
+            {products.length > 0 && (<ProductsGrid products={products} />)}
+            {products.length === 0 && (
+              <div>Sorry, No products found</div>
+            ) }
 
-        <ProductsGrid products={products} />
+          </div>
+        )}
+
       </Center>
     </>
   );
