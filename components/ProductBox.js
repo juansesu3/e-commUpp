@@ -1,9 +1,10 @@
 import { styled } from "styled-components";
-import Button from "./Button";
+import Button, { ButtonStyle } from "./Button";
 import CartIcon from "./icons/CartIcon";
 import Link from "next/link";
 import { Children, useContext } from "react";
 import { CartContext } from "./CartContext";
+import FlyingButton from "react-flying-item";
 
 const ProductWrapper = styled.div``;
 
@@ -51,8 +52,14 @@ const Price = styled.div`
   text-align: right;
   @media screen and (min-width: 768px) {
     font-size: 1.2rem;
-  font-weight: 600;
-  text-align: left;
+    font-weight: 600;
+    text-align: left;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  button {
+    ${ButtonStyle}
   }
 `;
 
@@ -70,10 +77,22 @@ const ProductBox = ({ _id, title, description, price, images }) => {
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-
-          <Button block={1} onClick={() => addProduct(_id)} primary={1} outline={1}>
-            Add to cart
-          </Button>
+          <ButtonWrapper onClick={() => addProduct(_id)}>
+            <FlyingButton
+              src={images[0]}
+              targetTop={"5%"}
+              targetLeft={"95%"}
+              flyingItemStyling={{
+                width: "auto",
+                heigth: "auto",
+                maxWidth: "60px",
+                maxHeigth: "60px",
+                borderRadius: 0,
+              }}
+            >
+              Add to cart
+            </FlyingButton>
+          </ButtonWrapper>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>
