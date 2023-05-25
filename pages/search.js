@@ -3,7 +3,8 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import ProductsGrid from "@/components/ProductsGrid";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { debounce } from "lodash";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
 
 const SearchInput = styled(Input)`
@@ -16,16 +17,25 @@ const SearchInput = styled(Input)`
 const SearchPage = () => {
   const [phrase, setPhrase] = useState("");
   const [products, setProducts] = useState([]);
-
+  const debouncedSearch = useCallback(
+    debounce((phrase) => SearchProducts(phrase), 500),
+    []
+  );
   useEffect(() => {
     if (phrase.length > 0) {
-      axios
-        .get("/api/products?phrase=" + encodeURIComponent(phrase))
-        .then((response) => {
-          setProducts(response.data);
-        });
+      debouncedSearch(phrase);
+    } else {
+      setProducts([]);
     }
   }, [phrase]);
+
+  const SearchProducts = (phrase) => {
+    axios
+      .get("/api/products?phrase=" + encodeURIComponent(phrase))
+      .then((response) => {
+        setProducts(response.data);
+      });
+  };
 
   return (
     <>
