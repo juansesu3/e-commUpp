@@ -2,6 +2,7 @@ import Center from "@/components/Center";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
 import ProductsGrid from "@/components/ProductsGrid";
+import Spinner from "@/components/Spinner";
 import axios from "axios";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -12,17 +13,18 @@ const SearchInput = styled(Input)`
   border-radius: 5px;
   margin: 30px 0 30px;
   font-size: 1.4rem;
+  position: sticky;
+  top: 70px;
 `;
 
 const SearchPage = () => {
   const [phrase, setPhrase] = useState("");
   const [products, setProducts] = useState([]);
-  const debouncedSearch = useCallback(
-    debounce((phrase) => SearchProducts(phrase), 500),
-    []
-  );
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (phrase.length > 0) {
+      setIsLoading(true);
       debouncedSearch(phrase);
     } else {
       setProducts([]);
@@ -34,8 +36,10 @@ const SearchPage = () => {
       .get("/api/products?phrase=" + encodeURIComponent(phrase))
       .then((response) => {
         setProducts(response.data);
+        setIsLoading(false);
       });
   };
+  const debouncedSearch = useCallback(debounce(SearchProducts, 500), []);
 
   return (
     <>
@@ -47,7 +51,13 @@ const SearchPage = () => {
           autoFocus
           placeholder="Search for products..."
         />
-        <ProductsGrid products={products} />
+        {!isLoading && phrase !== "" && products.length === 0 && (
+          <h2>No products found for query `{phrase}`</h2>
+        )}
+        {isLoading && <Spinner fullWidth={true} />}
+        {!isLoading && products.length > 0 && (
+          <ProductsGrid products={products} />
+        )}
       </Center>
     </>
   );
