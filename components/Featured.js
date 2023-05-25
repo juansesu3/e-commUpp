@@ -31,7 +31,7 @@ const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
-  img {
+  img.main {
     max-width: 100%;
     max-height: 200px;
     display: block;
@@ -100,6 +100,7 @@ const Featured = ({ product }) => {
           <Column>
             <RevealWrapper delay={0}>
               <img
+                className={'main'}
                 src="https://juan-sesu-ecommerce.s3.amazonaws.com/1684156350232.png"
                 alt="product-image"
               />
