@@ -61,7 +61,7 @@ const FlyingButton = (props) => {
   };
   useEffect(() => {
     const interval = setInterval(() => {
-      const reveal = imgRef.current.closest("div[data-sr-id]");
+      const reveal = imgRef.current?.closest("div[data-sr-id]");
       if (reveal?.style.opacity === "1") {
         reveal.style.transform = "none";
         
