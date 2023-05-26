@@ -95,8 +95,16 @@ const CartPage = () => {
         setIsSuccess(true);
         clearCart();
       }
+      axios.get("/api/address").then((response) => {
+        setName(response.data.name);
+        setEmail(response.data.userEmail);
+        setCity(response.data.city);
+        setPostalCode(response.data.postalCode);
+        setStreeAddres(response.data.streetAddress);
+        setCountry(response.data.country);
+      });
     }
-  }, [clearCart]);
+  }, []);
 
   const moreOfThisProduct = (id) => {
     addProduct(id);

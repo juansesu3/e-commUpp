@@ -57,11 +57,9 @@ const AccountPage = () => {
       country,
     };
     axios.put("/api/address", data);
-    
   };
   useEffect(() => {
     axios.get("/api/address").then((response) => {
-      console.log({ response });
       setName(response.data.name);
       setEmail(response.data.userEmail);
       setCity(response.data.city);
@@ -80,14 +78,14 @@ const AccountPage = () => {
           <div>
             <RevealWrapper delay={0}>
               <WhiteBox>
-                <h2>WishList</h2>
+                <h2>Wishlist</h2>
               </WhiteBox>
             </RevealWrapper>
           </div>
           <div>
             <RevealWrapper delay={100}>
               <WhiteBox>
-                <h2>Accoubt Details</h2>
+                <h2>Account Details</h2>
                 {!loaded && <Spinner fullWidth={true} />}
 
                 {loaded && (
