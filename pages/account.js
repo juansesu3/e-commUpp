@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Title from "@/components/Title";
 import WhiteBox from "@/components/WhiteBox";
+import axios from "axios";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { RevealWrapper } from "next-reveal";
 import { useState } from "react";
@@ -39,6 +40,11 @@ const AccountPage = () => {
 
   const Login = async () => {
     await signIn("google");
+  };
+
+  const saveAddress = () => {
+    const data = { name, email, city, streetAddress, postalCode, country };
+    axios.put("/api/address", data);
   };
 
   return (
@@ -103,7 +109,7 @@ const AccountPage = () => {
                   onChange={(ev) => setCountry(ev.target.value)}
                 />
 
-                <Button black={1} block={1} onClick={() => {}}>
+                <Button black={1} block={1} onClick={saveAddress}>
                   Save
                 </Button>
                 <hr />
