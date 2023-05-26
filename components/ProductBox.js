@@ -1,9 +1,12 @@
 import { styled } from "styled-components";
 import Link from "next/link";
 import FlyingButton from "./FlyingButton";
+import HeartOutLineIcon from "./icons/HeartOutLineIcon";
+import { useState } from "react";
+import HeartSolidIcon from "./HeartSolidIcon";
 
 const ProductWrapper = styled.div`
-  button{
+  button {
     width: 100%;
     text-align: center;
     justify-content: center;
@@ -19,6 +22,7 @@ const WhiteBox = styled(Link)`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+  position: relative;
   img {
     max-width: 100%;
     max-height: 80px;
@@ -59,12 +63,44 @@ const Price = styled.div`
   }
 `;
 
+const WhishListButton = styled.button`
+  border: 0;
+  width: 40px !important;
+  height: 40px;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  cursor: pointer;
+  ${(props => props.wished ? `
+    color: red;
+  ` : `
+  color: black;
+  `)}
+  svg {
+    width: 16px;
+  }
+`;
+
 const ProductBox = ({ _id, title, description, price, images }) => {
   const url = "/product/" + _id;
+  const [isWished, setIsWished] = useState(false);
+
+  const addToWishList = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    setIsWished(prev => !prev);
+  };
+
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
         <div>
+          <WhishListButton wished={isWished} onClick={addToWishList}>
+            {isWished ? <HeartSolidIcon/> : <HeartOutLineIcon />}
+            
+          </WhishListButton>
           <img src={images?.[0]} alt="products-images" />
         </div>
       </WhiteBox>
