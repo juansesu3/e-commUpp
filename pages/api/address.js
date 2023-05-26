@@ -5,14 +5,19 @@ import { Address } from "@/models/Address";
 
 const handle = async (req, res) => {
   await mongooseConnect();
-  const { user } = await getServerSession(req, res, authOptions);
-  const address = await Address.findOne({ userEmail: user.email });
-  if (address) {
-    res.json(await Address.findByIdAndUpdate(Address._id, req.body));
-   
-  } else {
-    res.json(await Address.create({ userEmail: user.email, ...req.body }));
+  if (req.method === "PUT") {
+    const { user } = await getServerSession(req, res, authOptions);
+    const address = await Address.findOne({ userEmail: user.email });
+    if (address) {
+      res.json(await Address.findByIdAndUpdate(address._id, req.body));
+    } else {
+      res.json(await Address.create({ userEmail: user.email, ...req.body }));
+    }
   }
-
+  if (req.method === "GET") {
+    const { user } = await getServerSession(req, res, authOptions);
+    const address = await Address.findOne({ userEmail: user.email });
+    res.json(address);
+  }
 };
 export default handle;
