@@ -37,7 +37,8 @@ const AccountPage = () => {
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreeAddres] = useState("");
   const [country, setCountry] = useState("");
-  const [loaded, setLoaded] = useState(false);
+  const [addressLoaded, setAddressLoaded] = useState(false);
+  const [wishListLoaded, setWishListLoaded] = useState(false);
   const [wishedProducts, setWishedProducts] = useState([]);
 
   const Logout = async () => {
@@ -69,10 +70,11 @@ const AccountPage = () => {
       setPostalCode(response.data.postalCode);
       setStreeAddres(response.data.streetAddress);
       setCountry(response.data.country);
-      setLoaded(true);
+      setAddressLoaded(true);
     });
     axios.get("/api/wishList").then((response) => {
       setWishedProducts(response.data.map((wp) => wp.product));
+      setWishListLoaded(true);
     });
   }, []);
 
@@ -85,12 +87,15 @@ const AccountPage = () => {
             <RevealWrapper delay={0}>
               <WhiteBox>
                 <h2>Wishlist</h2>
-                <WishedProductGrid>
-                  {wishedProducts.length > 0 &&
-                    wishedProducts.map((wp) => (
-                      <ProductBox key={wp._id} {...wp} wished={true} />
-                    ))}
-                </WishedProductGrid>
+                {!wishListLoaded && <Spinner fullWidth={true} />}
+                {wishListLoaded && (
+                  <WishedProductGrid>
+                    {wishedProducts.length > 0 &&
+                      wishedProducts.map((wp) => (
+                        <ProductBox key={wp._id} {...wp} wished={true} />
+                      ))}
+                  </WishedProductGrid>
+                )}
               </WhiteBox>
             </RevealWrapper>
           </div>
@@ -98,9 +103,9 @@ const AccountPage = () => {
             <RevealWrapper delay={100}>
               <WhiteBox>
                 <h2>Account Details</h2>
-                {!loaded && <Spinner fullWidth={true} />}
+                {!addressLoaded && <Spinner fullWidth={true} />}
 
-                {loaded && (
+                {addressLoaded && (
                   <>
                     <Input
                       type="text"
