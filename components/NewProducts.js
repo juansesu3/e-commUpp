@@ -11,11 +11,12 @@ const Title = styled.h2`
   font-weight: normal;
 `;
 
-const NewProducts = ({ products }) => {
+const NewProducts = ({ products, wishedProducts }) => {
+  
   return (
     <Center>
       <Title>New Arrivals</Title>
-      <ProductsGrid products={products}/>
+      <ProductsGrid products={products} wishedProducts={wishedProducts}/>
     </Center>
   );
 };

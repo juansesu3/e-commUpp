@@ -2,8 +2,9 @@ import { styled } from "styled-components";
 import Link from "next/link";
 import FlyingButton from "./FlyingButton";
 import HeartOutLineIcon from "./icons/HeartOutLineIcon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeartSolidIcon from "./HeartSolidIcon";
+import axios from "axios";
 
 const ProductWrapper = styled.div`
   button {
@@ -73,24 +74,34 @@ const WhishListButton = styled.button`
   right: 0;
   background-color: transparent;
   cursor: pointer;
-  ${(props => props.wished ? `
+  ${(props) =>
+    props.wished
+      ? `
     color: red;
-  ` : `
+  `
+      : `
   color: black;
-  `)}
+  `}
   svg {
     width: 16px;
   }
 `;
 
-const ProductBox = ({ _id, title, description, price, images }) => {
+const ProductBox = ({ _id, title, description, price, images, wished=false }) => {
   const url = "/product/" + _id;
   const [isWished, setIsWished] = useState(false);
+
+
 
   const addToWishList = (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
-    setIsWished(prev => !prev);
+    const nextValue = !isWished
+    axios.post('/api/wishList',{
+      product: _id, 
+    }).then(()=>{});
+    setIsWished(nextValue);
+
   };
 
   return (
@@ -98,8 +109,7 @@ const ProductBox = ({ _id, title, description, price, images }) => {
       <WhiteBox href={url}>
         <div>
           <WhishListButton wished={isWished} onClick={addToWishList}>
-            {isWished ? <HeartSolidIcon/> : <HeartOutLineIcon />}
-            
+            {isWished ? <HeartSolidIcon /> : <HeartOutLineIcon />}
           </WhishListButton>
           <img src={images?.[0]} alt="products-images" />
         </div>
