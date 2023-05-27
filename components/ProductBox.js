@@ -89,7 +89,7 @@ const WhishListButton = styled.button`
 
 const ProductBox = ({ _id, title, description, price, images, wished=false }) => {
   const url = "/product/" + _id;
-  const [isWished, setIsWished] = useState(false);
+  const [isWished, setIsWished] = useState(wished);
 
 
 

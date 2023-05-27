@@ -32,7 +32,7 @@ export const getServerSideProps = async (ctx) => {
     userEmail: user.email,
     product: newProducts.map(p=>p._id.toString()),
   });
-  console.log({wishNewProducts});
+  
   return {
     props: {
       FeaturedProduct: JSON.parse(JSON.stringify(FeaturedProduct)),
