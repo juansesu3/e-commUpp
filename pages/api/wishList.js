@@ -14,7 +14,7 @@ const handle = async (req, res) => {
     });
     if (wisheDoc) {
       await WishedProduct.findByIdAndDelete(wisheDoc._id);
-      res.json({wisheDoc});
+      res.json({ wisheDoc });
     } else {
       await WishedProduct.create({
         userEmail: user.email,
@@ -22,6 +22,9 @@ const handle = async (req, res) => {
       });
       res.json("create");
     }
+  }
+  if (req.method === "GET") {
+    res.json(await WishedProduct.find({ userEmail: user.email }).populate('product'));
   }
 };
 

@@ -2,11 +2,10 @@ import Button from "@/components/Button";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import Input from "@/components/Input";
+import ProductBox from "@/components/ProductBox";
 import Spinner from "@/components/Spinner";
-import Title from "@/components/Title";
 import WhiteBox from "@/components/WhiteBox";
 import axios from "axios";
-import { set } from "lodash";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { RevealWrapper } from "next-reveal";
 import { useEffect, useState } from "react";
@@ -23,6 +22,11 @@ const ColsWrapper = styled.div`
   gap: 40px;
   margin: 40px 0;
 `;
+const WishedProductGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+`;
 
 const AccountPage = () => {
   const { data: session } = useSession();
@@ -34,6 +38,7 @@ const AccountPage = () => {
   const [streetAddress, setStreeAddres] = useState("");
   const [country, setCountry] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [wishedProducts, setWishedProducts] = useState([]);
 
   const Logout = async () => {
     await signOut({
@@ -66,6 +71,9 @@ const AccountPage = () => {
       setCountry(response.data.country);
       setLoaded(true);
     });
+    axios.get("/api/wishList").then((response) => {
+      setWishedProducts(response.data.map((wp) => wp.product));
+    });
   }, []);
 
   return (
@@ -77,6 +85,12 @@ const AccountPage = () => {
             <RevealWrapper delay={0}>
               <WhiteBox>
                 <h2>Wishlist</h2>
+                <WishedProductGrid>
+                  {wishedProducts.length > 0 &&
+                    wishedProducts.map((wp) => (
+                      <ProductBox key={wp._id} {...wp} wished={true} />
+                    ))}
+                </WishedProductGrid>
               </WhiteBox>
             </RevealWrapper>
           </div>
