@@ -35,8 +35,6 @@ const AccountPage = () => {
   const [country, setCountry] = useState("");
   const [loaded, setLoaded] = useState(false);
 
-  console.log({ name, email, city, postalCode, streetAddress, country });
-
   const Logout = async () => {
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_URL,

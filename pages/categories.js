@@ -7,6 +7,9 @@ import { Product } from "@/models/Product";
 import Link from "next/link";
 import { styled } from "styled-components";
 import { RevealWrapper } from "next-reveal";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { WishedProduct } from "@/models/WishedProducts";
 
 const CategoryGrid = styled.div`
   display: grid;
@@ -48,7 +51,7 @@ const ShowAllSquare = styled(Link)`
   text-decoration: none;
 `;
 
-const CategoriesPage = ({ mainCategories, categoriesProducts }) => {
+const CategoriesPage = ({ mainCategories, categoriesProducts, wishedProducts=[] }) => {
   return (
     <>
       <Header />
@@ -66,16 +69,14 @@ const CategoriesPage = ({ mainCategories, categoriesProducts }) => {
               <CategoryGrid>
                 {categoriesProducts[cat._id].map((p, index) => (
                   <RevealWrapper key={p._id} delay={index * 50}>
-                    
-                    <ProductBox {...p} />
+                    <ProductBox {...p} wished={wishedProducts.includes(p._id)} />
                   </RevealWrapper>
                 ))}
-                <RevealWrapper delay={categoriesProducts[cat._id].length*50}>
-                <ShowAllSquare href={"/category/" + cat._id}>
-                  Show all &rarr;
-                </ShowAllSquare>
+                <RevealWrapper delay={categoriesProducts[cat._id].length * 50}>
+                  <ShowAllSquare href={"/category/" + cat._id}>
+                    Show all &rarr;
+                  </ShowAllSquare>
                 </RevealWrapper>
-               
               </CategoryGrid>
             </CategoryWrapper>
           ))}
@@ -85,10 +86,11 @@ const CategoriesPage = ({ mainCategories, categoriesProducts }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (ctx) => {
   const categories = await Category.find();
   const mainCategories = categories.filter((c) => !c.parent);
   const categoriesProducts = {}; //catId => [products]
+  const allFetchedProductsId = [];
 
   for (const mainCat of mainCategories) {
     const mainCatId = mainCat._id.toString();
@@ -101,13 +103,21 @@ export const getServerSideProps = async () => {
       limit: 3,
       sort: { _id: -1 },
     });
+    allFetchedProductsId.push(...products.map((p) => p._id.toString()));
     categoriesProducts[mainCat._id] = products;
   }
+
+  const { user } = await getServerSession(ctx.req, ctx.res, authOptions);
+  const wishedProducts = await WishedProduct.find({
+    userEmail: user.email,
+    product: allFetchedProductsId,
+  });
 
   return {
     props: {
       mainCategories: JSON.parse(JSON.stringify(mainCategories)),
       categoriesProducts: JSON.parse(JSON.stringify(categoriesProducts)),
+      wishedProducts: wishedProducts.map(i => i.product.toString()),
     },
   };
 };
