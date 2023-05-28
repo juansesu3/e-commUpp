@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Input from "@/components/Input";
 import Table from "@/components/Table";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { RevealWrapper } from "next-reveal";
 import { useContext, useEffect, useState } from "react";
 import { styled } from "styled-components";
@@ -70,6 +71,7 @@ const CityHolder = styled.div`
 const CartPage = () => {
   const { cartProducts, addProduct, removeProduct, clearCart } =
     useContext(CartContext);
+  const { data: session } = useSession();
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -95,16 +97,22 @@ const CartPage = () => {
         setIsSuccess(true);
         clearCart();
       }
-      axios.get("/api/address").then((response) => {
-        setName(response.data.name);
-        setEmail(response.data.userEmail);
-        setCity(response.data.city);
-        setPostalCode(response.data.postalCode);
-        setStreeAddres(response.data.streetAddress);
-        setCountry(response.data.country);
-      });
     }
   }, []);
+
+  useEffect(() => {
+    if (!session){
+      return;
+    }
+    axios.get("/api/address").then((response) => {
+      setName(response.data.name);
+      setEmail(response.data.userEmail);
+      setCity(response.data.city);
+      setPostalCode(response.data.postalCode);
+      setStreeAddres(response.data.streetAddress);
+      setCountry(response.data.country);
+    });
+  }, [session]);
 
   const moreOfThisProduct = (id) => {
     addProduct(id);

@@ -12,7 +12,7 @@ const HomePage = ({ FeaturedProduct, newProducts, wishNewProducts }) => {
     <div>
       <Header />
       <Featured product={FeaturedProduct} />
-      <NewProducts products={newProducts} wishedProducts={wishNewProducts}/>
+      <NewProducts products={newProducts} wishedProducts={wishNewProducts} />
     </div>
   );
 };
@@ -27,17 +27,20 @@ export const getServerSideProps = async (ctx) => {
     sort: { _id: -1 },
     limit: 10,
   });
-  const { user } = await getServerSession(ctx.req, ctx.res, authOptions);
-  const wishNewProducts = await WishedProduct.find({
-    userEmail: user.email,
-    product: newProducts.map(p=>p._id.toString()),
-  });
-  
+  const session = await getServerSession(ctx.req, ctx.res, authOptions);
+
+  const wishNewProducts = session?.user
+    ? await WishedProduct.find({
+        userEmail: session?.user.email,
+        product: newProducts.map((p) => p._id.toString()),
+      })
+    : [];
+
   return {
     props: {
       FeaturedProduct: JSON.parse(JSON.stringify(FeaturedProduct)),
       newProducts: JSON.parse(JSON.stringify(newProducts)),
-      wishNewProducts : wishNewProducts.map(i=> i.product.toString()),
+      wishNewProducts: wishNewProducts.map((i) => i.product.toString()),
     },
   };
 };
