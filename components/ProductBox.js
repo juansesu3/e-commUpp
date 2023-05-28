@@ -87,21 +87,31 @@ const WhishListButton = styled.button`
   }
 `;
 
-const ProductBox = ({ _id, title, description, price, images, wished=false }) => {
+const ProductBox = ({
+  _id,
+  title,
+  description,
+  price,
+  images,
+  wished = false,
+  onRemoveFromWishList = () => {},
+}) => {
   const url = "/product/" + _id;
   const [isWished, setIsWished] = useState(wished);
-
-
 
   const addToWishList = (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
-    const nextValue = !isWished
-    axios.post('/api/wishList',{
-      product: _id, 
-    }).then(()=>{});
+    const nextValue = !isWished;
+    if (nextValue === false && onRemoveFromWishList) {
+      onRemoveFromWishList(_id);
+    }
+    axios
+      .post("/api/wishList", {
+        product: _id,
+      })
+      .then(() => {});
     setIsWished(nextValue);
-
   };
 
   return (

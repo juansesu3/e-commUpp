@@ -78,6 +78,12 @@ const AccountPage = () => {
     });
   }, []);
 
+  const productRemovedFromWishList = (idRemove) => {
+    setWishedProducts((products) => {
+      return [...products.filter((p) => p._id.toString() !== idRemove)];
+    });
+  };
+
   return (
     <>
       <Header />
@@ -92,8 +98,18 @@ const AccountPage = () => {
                   <WishedProductGrid>
                     {wishedProducts.length > 0 &&
                       wishedProducts.map((wp) => (
-                        <ProductBox key={wp._id} {...wp} wished={true} />
+                        <ProductBox
+                          key={wp._id}
+                          {...wp}
+                          wished={true}
+                          onRemoveFromWishList={productRemovedFromWishList}
+                        />
                       ))}
+                      {wishedProducts.length === 0 && (
+                        <>
+                        <p>Your wish list is empty</p>
+                        </>
+                      )}
                   </WishedProductGrid>
                 )}
               </WhiteBox>
