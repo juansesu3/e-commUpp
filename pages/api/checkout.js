@@ -1,6 +1,8 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import { Product } from "@/models/Product";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
 const stripe = require("stripe")(process.env.STRIPE_SK);
 
 const handler = async (req, res) => {
@@ -8,8 +10,15 @@ const handler = async (req, res) => {
     res.json("should be a post request");
     return;
   }
-  const { name, email, city, postalCode, streetAddress, country, cartProducts, } =
-    req.body;
+  const {
+    name,
+    email,
+    city,
+    postalCode,
+    streetAddress,
+    country,
+    cartProducts,
+  } = req.body;
   await mongooseConnect();
   const producstIds = cartProducts;
   const uniqueIds = [...new Set(producstIds)];
@@ -32,6 +41,9 @@ const handler = async (req, res) => {
       });
     }
   }
+
+  const session = await getServerSession(req, res, authOptions);
+
   const orderDoc = await Order.create({
     line_items,
     name,
@@ -41,17 +53,19 @@ const handler = async (req, res) => {
     streetAddress,
     country,
     paid: false,
+    userEmail: session?.user?.email,
   });
-  const session = await stripe.checkout.sessions.create({
+
+  const stripeSession = await stripe.checkout.sessions.create({
     line_items,
     mode: "payment",
     customer_email: email,
     success_url: process.env.PUBLIC_URL + "/cart?success=1",
     cancel_url: process.env.PUBLIC_URL + "/cart?cancel=1",
-    metadata: { orderId: orderDoc._id.toString(),test:'ok' },
+    metadata: { orderId: orderDoc._id.toString(), test: "ok" },
   });
   res.json({
-    url: session.url,
+    url: stripeSession.url,
   });
 };
 
