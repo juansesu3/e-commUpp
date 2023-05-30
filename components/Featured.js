@@ -5,7 +5,7 @@ import CartIcon from "./icons/CartIcon";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
 import FlyingButton from "./FlyingButton";
-import {RevealWrapper} from "next-reveal";
+import { RevealWrapper } from "next-reveal";
 
 const Bg = styled.div`
   background-color: #222;
@@ -15,7 +15,7 @@ const Bg = styled.div`
 
 const Title = styled.h1`
   margin: 0;
-  font-weight: normal; 
+  font-weight: normal;
   font-size: 1.5rem;
   @media screen and (min-width: 768px) {
     font-size: 3rem;
@@ -39,11 +39,14 @@ const ColumnsWrapper = styled.div`
   }
   div:nth-child(1) {
     order: 2;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media screen and (min-width: 768px) {
     grid-template-columns: 1.1fr 0.9fr;
-    div:nth-child(1) {
+
+    & > div:nth-child(1) {
       order: 0;
     }
     img {
@@ -63,6 +66,19 @@ const ButtonWrapper = styled.div`
   margin-top: 25px;
 `;
 
+const CenterImg = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ImgColoumn = styled(Column)`
+  & > div {
+    width: 100%;
+  }
+`;
+const ContentWrapper = styled.div``;
+
 const Featured = ({ product }) => {
   const { addProduct } = useContext(CartContext);
 
@@ -72,40 +88,42 @@ const Featured = ({ product }) => {
         <ColumnsWrapper>
           <Column>
             <div>
-            
-
-              <RevealWrapper origin={'left'} delay={0}>
-              <Title>{product.title}</Title>
-              <Desc>{product.description}</Desc>
-              <ButtonWrapper>
-                <ButtonLink
-                  href={"/product/" + product._id}
-                  outline={1}
-                  white={1}
-                >
-                  Read more
-                </ButtonLink>
-                <FlyingButton
-                  white={1}
-                  _id={product._id}
-                  src={product.images?.[0]}
-                >
-                  <CartIcon />
-                  Add to cart
-                </FlyingButton>
-              </ButtonWrapper>
+              <RevealWrapper origin={"left"} delay={0}>
+                <ContentWrapper>
+                  <Title>{product.title}</Title>
+                  <Desc>{product.description}</Desc>
+                  <ButtonWrapper>
+                    <ButtonLink
+                      href={"/product/" + product._id}
+                      outline={1}
+                      white={1}
+                    >
+                      Read more
+                    </ButtonLink>
+                    <FlyingButton
+                      white={1}
+                      _id={product._id}
+                      src={product.images?.[0]}
+                    >
+                      <CartIcon />
+                      Add to cart
+                    </FlyingButton>
+                  </ButtonWrapper>
+                </ContentWrapper>
               </RevealWrapper>
             </div>
           </Column>
-          <Column>
+          <ImgColoumn>
             <RevealWrapper delay={0}>
-              <img
-                className={'main'}
-                src="https://juan-sesu-ecommerce.s3.amazonaws.com/1684156350232.png"
-                alt="product-image"
-              />
+              <CenterImg>
+                <img
+                  className={"main"}
+                  src={product.images?.[0]}
+                  alt="product-image"
+                />
+              </CenterImg>
             </RevealWrapper>
-          </Column>
+          </ImgColoumn>
         </ColumnsWrapper>
       </Center>
     </Bg>
