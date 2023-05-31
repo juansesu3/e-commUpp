@@ -25,6 +25,7 @@ export const getServerSideProps = async (ctx) => {
     name: "featureProductId",
   });
   const featuredProductId = featuredProductSetting.value;
+  console.log(featuredProductId);
   await mongooseConnect();
   const FeaturedProduct = await Product.findById(featuredProductId);
   const newProducts = await Product.find({}, null, {

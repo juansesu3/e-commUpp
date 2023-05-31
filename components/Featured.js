@@ -81,6 +81,7 @@ const ContentWrapper = styled.div``;
 
 const Featured = ({ product }) => {
   const { addProduct } = useContext(CartContext);
+  console.log({product})
 
   return (
     <Bg>
