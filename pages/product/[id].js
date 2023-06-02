@@ -1,15 +1,14 @@
-import Button from "@/components/Button";
-import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import FlyingButton from "@/components/FlyingButton";
 import Header from "@/components/Header";
 import ProductImages from "@/components/ProductImages";
+import ProductsRiviews from "@/components/ProductsRiviews";
 import Title from "@/components/Title";
 import WhiteBox from "@/components/WhiteBox";
 import CartIcon from "@/components/icons/CartIcon";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
-import { useContext } from "react";
+
 import { styled } from "styled-components";
 
 const ColWrapper = styled.div`
@@ -32,7 +31,6 @@ const Price = styled.span`
 `;
 
 const ProductPage = ({ product }) => {
-  const { addProduct } = useContext(CartContext);
   return (
     <>
       <Header />
@@ -50,13 +48,21 @@ const ProductPage = ({ product }) => {
               </div>
 
               <div>
-                <FlyingButton main={1} _id={product._id} src={product.images?.[0]}>
+                <FlyingButton
+                  main={1}
+                  _id={product._id}
+                  src={product.images?.[0]}
+                >
                   <CartIcon /> Add to cart
                 </FlyingButton>
               </div>
             </PriceRow>
           </div>
         </ColWrapper>
+        <ProductsRiviews product={product}/>
+
+
+       
       </Center>
     </>
   );
