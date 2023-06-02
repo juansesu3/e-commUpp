@@ -19,15 +19,19 @@ const Subtitles = styled.h3`
 `;
 const ColsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-
+  grid-template-columns:  1fr;
+  gap: 20px;
   margin-bottom: 40px;
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+
+  }
 `;
 
 const ReviewWrapper = styled.div`
   margin-bottom: 10px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #eee;
   padding: 10px 0;
   h3 {
     margin: 3px 0;
@@ -37,7 +41,7 @@ const ReviewWrapper = styled.div`
   }
   p {
     margin: 0;
-    font-size: .7rem;
+    font-size: 0.7rem;
     line-height: 1rem;
     color: #555;
   }
@@ -47,8 +51,8 @@ const ReviewHeader = styled.div`
   display: flex;
   justify-content: space-between;
   time {
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 12px;
+
     color: #aaa;
   }
 `;
@@ -88,52 +92,55 @@ const ProductsRiviews = ({ product }) => {
     <div>
       <Title>Reviews</Title>
       <ColsWrapper>
-        <WhiteBox>
-          <Subtitles>Add review</Subtitles>
-          <div>
-            <StarsRatting onChange={setStars} />
-          </div>
+        <div>
+          <WhiteBox>
+            <Subtitles>Add review</Subtitles>
+            <div>
+              <StarsRatting onChange={setStars} />
+            </div>
 
-          <Input
-            value={title}
-            onChange={(ev) => setTitle(ev.target.value)}
-            placeholder="Title"
-          />
-          <Textarea
-            value={description}
-            onChange={(ev) => setDescription(ev.target.value)}
-            placeholder="Was it goog? Pros? Cons?"
-          />
-          <div>
-            <Button primary={1} onClick={submitReview}>
-              Submit your review
-            </Button>
-          </div>
-        </WhiteBox>
+            <Input
+              value={title}
+              onChange={(ev) => setTitle(ev.target.value)}
+              placeholder="Title"
+            />
+            <Textarea
+              value={description}
+              onChange={(ev) => setDescription(ev.target.value)}
+              placeholder="Was it goog? Pros? Cons?"
+            />
+            <div>
+              <Button primary={1} onClick={submitReview}>
+                Submit your review
+              </Button>
+            </div>
+          </WhiteBox>
+        </div>
+        <div>
+          <WhiteBox>
+            <Subtitles>All reviews</Subtitles>
+            {reviewsLoading && <Spinner fullWidth={true} />}
+            {reviews.length === 0 && <p>No reviews :( </p>}
 
-        <WhiteBox>
-          <Subtitles>All reviews</Subtitles>
-          {reviewsLoading && <Spinner fullWidth={true} />}
-          {reviews.length === 0 && <p>No reviews :( </p>}
-
-          {reviews.length > 0 &&
-            reviews.map((review) => (
-              <ReviewWrapper key={review._id}>
-                <ReviewHeader>
-                  <StarsRatting
-                    size="sm"
-                    disabled={true}
-                    defaultHowMany={review.stars}
-                  />
-                  <time>
-                    {new Date(review.createdAt).toLocaleString("sv-SE")}
-                  </time>
-                </ReviewHeader>
-                <h3>{review.title}</h3>
-                <p> {review.description}</p>
-              </ReviewWrapper>
-            ))}
-        </WhiteBox>
+            {reviews.length > 0 &&
+              reviews.map((review) => (
+                <ReviewWrapper key={review._id}>
+                  <ReviewHeader>
+                    <StarsRatting
+                      size="sm"
+                      disabled={true}
+                      defaultHowMany={review.stars}
+                    />
+                    <time>
+                      {new Date(review.createdAt).toLocaleString("sv-SE")}
+                    </time>
+                  </ReviewHeader>
+                  <h3>{review.title}</h3>
+                  <p> {review.description}</p>
+                </ReviewWrapper>
+              ))}
+          </WhiteBox>
+        </div>
       </ColsWrapper>
     </div>
   );

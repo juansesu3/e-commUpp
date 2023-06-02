@@ -9,8 +9,8 @@ const handle = async (req, res) => {
   }
   if (req.method === "GET") {
     const { product } = req.query;
-    console.log('hola', product)
-    res.json(await Review.find({ product }));
+    console.log("hola", product);
+    res.json(await Review.find({ product }, null, { sort: { createdAt: -1 } }));
   }
 };
 
