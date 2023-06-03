@@ -5,7 +5,8 @@ import { Order } from "@/models/Order";
 
 const handle = async (req, res) => {
   await mongooseConnect();
-  const { user } = getServerSession(req, res, authOptions);
-  res.json(await Order.find({ userEmail: user?.email }));
+  const {user} = await getServerSession(req, res, authOptions);
+  res.json(await Order.find({userEmail: user?.email}));
 };
 export default handle;
+//{ userEmail: user?.email }

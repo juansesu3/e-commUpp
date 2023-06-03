@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import SingleOrder from "@/components/SingleOrder";
 
+
+
 const CityHolder = styled.div`
   display: flex;
   gap: 5px;
@@ -33,9 +35,9 @@ const WishedProductGrid = styled.div`
   gap: 40px;
 `;
 
-const AccountPage = () => {
-  const { data: session } = useSession();
+const AccountPage =  () => {
 
+  const { data: session } = useSession();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
@@ -50,6 +52,7 @@ const AccountPage = () => {
   const [orders, setOrders] = useState([]);
 
   const Logout = async () => {
+   
     await signOut({
       callbackUrl: process.env.NEXT_PUBLIC_URL,
     });
@@ -76,7 +79,7 @@ const AccountPage = () => {
     }
     setAddressLoaded(false);
     setWishListLoaded(false);
-    setOrdersLoaded(false)
+    setOrdersLoaded(false);
     axios.get("/api/address").then((response) => {
       setName(response.data.name);
       setEmail(response.data.userEmail);
@@ -86,19 +89,23 @@ const AccountPage = () => {
       setCountry(response.data.country);
       setAddressLoaded(true);
     });
+
+    axios.get("/api/orders").then((response) => {
+      setOrders(response.data);
+      setOrdersLoaded(true);
+    });
+
     axios.get("/api/wishList").then((response) => {
       setWishedProducts(response.data.map((wp) => wp.product));
       setWishListLoaded(true);
     });
-    axios.get('/api/orders').then(response=>{
-      setOrders(response.data);
-      console.log(response.data);
-      setOrdersLoaded(true);
-
-    })
   }, [session]);
 
-  const productRemovedFromWishList = (idRemove) => {
+  
+
+  const productRemovedFromWishList = async (idRemove) => {
+ 
+    
     setWishedProducts((products) => {
       return [...products.filter((p) => p._id.toString() !== idRemove)];
     });
@@ -117,24 +124,18 @@ const AccountPage = () => {
                   active={activeTab}
                   onChange={setActiveTab}
                 />
-                {activeTab ==='Orders' && (
+                {activeTab === "Orders" && (
                   <>
-                  {!ordersLoaded && (
-                    <Spinner fullWidth={true}/>
-                  )}
-                  
-                  {ordersLoaded &&(
-                    <div>
-                      {orders.length === 0 && (
-                        <p>Login to see your orders</p>
-                      )}
-                      {orders.length > 0 && orders.map((o)=>(
-                        <SingleOrder key={o._id} {...o}  />
-                      ))}
-                    </div>
-                  )}
-                  </>
+                    {!ordersLoaded && <Spinner fullWidth={true} />}
 
+                    {ordersLoaded && (
+                      <div>
+                        {orders.length === 0 && <p>Login to see your orders</p>}
+                        {orders.length > 0 &&
+                          orders.map((o) => <SingleOrder key={o._id} {...o} />)}
+                      </div>
+                    )}
+                  </>
                 )}
                 {activeTab === "Wishlist" && (
                   <>
