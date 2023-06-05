@@ -7,16 +7,29 @@ const StyledORder = styled.div`
   display: flex;
   gap: 40px;
   align-items: center;
+  justify-content: space-evenly;
   time {
     font-size: 1rem;
 
     color: #555;
+  }
+
+  @media screen and (min-width: 768px) {
+    margin: 10px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: space-around;
   }
 `;
 
 const ProductRow = styled.div`
   span {
     color: #aaa;
+  }
+  @media screen and (min-width: 768px) {
   }
 `;
 const Address = styled.div`

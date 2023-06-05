@@ -21,13 +21,23 @@ const CityHolder = styled.div`
 `;
 
 const ColsWrapper = styled.div`
-  display: grid;
+display: flex;
+flex-direction: column-reverse;
+margin-top: 20px;
+gap:15px;
+
+  @media screen and (min-width: 768px) {
+    display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: 40px;
   margin: 40px 0;
   p {
     margin: 5px;
   }
+  }
+
+
+
 `;
 const WishedProductGrid = styled.div`
   display: grid;

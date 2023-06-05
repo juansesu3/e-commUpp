@@ -13,15 +13,23 @@ const CategoryHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  flex-direction: column;
+  margin-bottom: 20px;
   h1 {
     font-size: 1.5em;
+  }
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
   }
 `;
 
 const FiltersWrapper = styled.div`
   display: flex;
   gap: 15px;
+  flex-direction: column;
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 `;
 
 const Filter = styled.div`
@@ -31,11 +39,17 @@ const Filter = styled.div`
   display: flex;
   gap: 5px;
   color: #444;
+  justify-content: space-between;
+  width: 100%;
   select {
     background-color: transparent;
     border: 0;
     font-size: inherit;
     color: #444;
+  }
+
+  @media screen and (min-width: 768px) {
+    align-items: center;
   }
 `;
 
@@ -132,14 +146,10 @@ const CategoryPage = ({
         {loadingProducts && <Spinner fullWidth />}
         {!loadingProducts && (
           <div>
-            {products.length > 0 && (<ProductsGrid products={products} />)}
-            {products.length === 0 && (
-              <div>Sorry, No products found</div>
-            ) }
-
+            {products.length > 0 && <ProductsGrid products={products} />}
+            {products.length === 0 && <div>Sorry, No products found</div>}
           </div>
         )}
-
       </Center>
     </>
   );
